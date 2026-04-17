@@ -1,0 +1,24 @@
+{
+  "name": "qa-playwright-framework",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test tests/smoke",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report",
+    "analyze:failures": "tsx scripts/failure-analysis.ts",
+    "analyze:failures:v2": "tsx scripts/failure-analysis.ts",
+    "analyze:maintenance": "tsx scripts/test-maintenance.ts",
+    "clean": "rm -rf test-results playwright-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@types/node": "^24.7.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
+}
