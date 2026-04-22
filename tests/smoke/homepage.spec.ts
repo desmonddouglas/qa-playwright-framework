@@ -17,7 +17,7 @@ test('homepage URL is correct', async ({ homePage }) => {
 
 test('homepage title is correct', async ({ homePage }) => {
   await homePage.goto();
-  await expect(homePage.page).toHaveTitle(/Example Domain/);
+  await expect(homePage.page).toHaveTitle(/Wrong Title/);
 });
 
 test('homepage body contains expected text', async ({ homePage }) => {

@@ -31,6 +31,12 @@ jobs:
       - name: Run Failure Analysis Agent
         run: npm run analyze:failures
 
+      - name: Run Test Maintenance Agent
+        run: npm run analyze:maintenance
+
+      - name: Generate Maintenance Markdown Report
+        run: npm run report:maintenance
+
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
         if: always()
