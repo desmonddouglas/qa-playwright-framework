@@ -1,0 +1,1 @@
+.DS_Store rm --cached .DS_Storegit add .gitignoregit commit -m Remove .DS_Store and update gitignore
