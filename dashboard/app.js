@@ -52,6 +52,22 @@ function extractTimestamp(aiSummaryText) {
   return match ? match[1] : null;
 }
 
+function formatTimestamp(ts) {
+  if (!ts) return 'Unknown';
+
+  const date = new Date(ts);
+
+  return date.toLocaleString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+}
+
 function formatAiSummary(text) {
   return text
     .replace(/^# .*$/gm, '')
@@ -70,6 +86,7 @@ async function initDashboard() {
   const riskLevel = releaseRisk.riskLevel || 'unknown';
   const releaseRecommendation = releaseRisk.releaseRecommendation || 'unknown';
 
+  // 🔥 Release Status
   const releaseStatus = document.getElementById('releaseStatus');
   releaseStatus.innerHTML = `
     <div class="${getBadgeClass(riskLevel)}">
@@ -80,16 +97,18 @@ async function initDashboard() {
     </div>
   `;
 
+  // 🕒 Timestamp (CI-based)
   const generatedTime = extractTimestamp(aiSummary);
 
   const timestamp = document.createElement('div');
   timestamp.className = 'timestamp';
   timestamp.textContent = generatedTime
-    ? `Last CI Run: ${new Date(generatedTime).toLocaleString()}`
+    ? `Last CI Run: ${formatTimestamp(generatedTime)}`
     : 'Last CI Run: Unknown';
 
   releaseStatus.appendChild(timestamp);
 
+  // 🟢 Health Indicator
   const isHealthy =
     (failureSummary.failedTests ?? 1) === 0 &&
     (failureSummary.flakyTests ?? 1) === 0 &&
@@ -104,6 +123,7 @@ async function initDashboard() {
     releaseStatus.appendChild(banner);
   }
 
+  // 📊 Metrics
   setText('totalTests', failureSummary.uniqueTests ?? '--');
   setText('passedResults', failureSummary.passedResults ?? '--');
   setText('failedTests', failureSummary.failedTests ?? '--');
@@ -113,6 +133,7 @@ async function initDashboard() {
   const missingCoverage = coverageGap.filter(area => area.status === 'missing');
   setText('coverageGaps', missingCoverage.length);
 
+  // 🚦 Risk Details
   setText('riskScore', releaseRisk.riskScore ?? '--');
   setText('riskLevel', riskLevel);
   setText('releaseRecommendation', releaseRecommendation);
@@ -133,6 +154,7 @@ async function initDashboard() {
     )
   );
 
+  // 🤖 AI Summary
   document.getElementById('aiSummary').textContent = formatAiSummary(aiSummary);
 }
 
