@@ -10,7 +10,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  actions: read
 
 jobs:
   deploy:
@@ -21,29 +20,19 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Download analysis artifacts
-        uses: dawidd6/action-download-artifact@v6
-        with:
-          workflow: playwright.yml
-          run_id: ${{ github.event.workflow_run.id }}
-          name: analysis-output
-          path: artifacts
-
       - name: Prepare site
         run: |
           mkdir site
           cp -r dashboard/* site/
-
-          mkdir -p site/artifacts
-          cp -r artifacts/* site/artifacts/
+          cp -r artifacts site/artifacts || true
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload Pages artifact
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         uses: actions/deploy-pages@v4
