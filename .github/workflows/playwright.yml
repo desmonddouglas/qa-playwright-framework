@@ -57,3 +57,6 @@ jobs:
         with:
           name: analysis-output
           path: artifacts/
+
+      - name: Run Release Risk Agent
+        run: npm run analyze:release-risk

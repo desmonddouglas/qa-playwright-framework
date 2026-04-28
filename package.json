@@ -10,6 +10,7 @@
     "analyze:failures": "tsx scripts/failure-analysis.ts",
     "analyze:failures:v2": "tsx scripts/failure-analysis.ts",
     "analyze:maintenance": "tsx scripts/test-maintenance.ts",
+    "analyze:release-risk": "tsx scripts/release-risk.ts",
     "report:maintenance": "tsx scripts/maintenance-report.ts",
     "clean": "rm -rf test-results playwright-report"
   },
