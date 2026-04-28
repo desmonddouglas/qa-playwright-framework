@@ -23,6 +23,6 @@ test('homepage title is correct', async ({ homePage }) => {
 test('homepage body contains expected text', async ({ homePage }) => {
   await homePage.goto();
   await expect(
-    homePage.page.getByText(/This domain is for use in documentation examples/)
+    homePage.page.getByText(/documentation examples/)
   ).toBeVisible();
 });

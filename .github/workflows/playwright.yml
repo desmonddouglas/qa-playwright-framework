@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   test-and-analyze:
     runs-on: ubuntu-latest
@@ -37,6 +42,38 @@ jobs:
       - name: Generate Maintenance Markdown Report
         run: npm run report:maintenance
 
+      - name: Run Release Risk Agent
+        run: npm run analyze:release-risk
+
+      - name: Run Coverage Gap Agent
+        run: npm run analyze:coverage
+    
+      - name: Run Test Generation Agent
+        run: npm run generate:tests
+
+      - name: Generate AI Summary
+        run: npm run ai:summary
+
+      # 🔥 DEPLOY DASHBOARD (THIS IS WHAT YOU WERE MISSING)
+      - name: Prepare dashboard site
+        run: |
+          mkdir site
+          cp -r dashboard/* site/
+          mkdir -p site/artifacts
+          cp -r artifacts/* site/artifacts/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy dashboard to GitHub Pages
+        uses: actions/deploy-pages@v4
+
+      # 📦 ARTIFACTS (KEEP THESE LAST)
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
         if: always()
@@ -57,17 +94,4 @@ jobs:
         with:
           name: analysis-output
           path: artifacts/
-
-      - name: Run Release Risk Agent
-        run: npm run analyze:release-risk
-
-      - name: Run Coverage Gap Agent
-        run: npm run analyze:coverage
-    
-      - name: Run Test Generation Agent
-        run: npm run generate:tests
-
-      - name: Generate AI Summary
-        run: npm run ai:summary
-
-      
+          

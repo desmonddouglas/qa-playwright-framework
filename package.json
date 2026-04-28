@@ -15,11 +15,13 @@
     "analyze:coverage": "tsx scripts/coverage-gap.ts",
     "generate:tests": "tsx scripts/test-generation.ts",
     "report:maintenance": "tsx scripts/maintenance-report.ts",
+    "dashboard": "serve .",
     "clean": "rm -rf test-results playwright-report"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "@types/node": "^24.7.0",
+    "serve": "^14.2.6",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.0"
