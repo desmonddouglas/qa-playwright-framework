@@ -17,6 +17,28 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Run tests
+        run: npm run test:smoke
+
+      - name: Run QA agents
+        run: |
+          npm run analyze:failures
+          npm run analyze:maintenance
+          npm run analyze:coverage
+          npm run analyze:release-risk
+          npm run ai:summary
+
       - name: Prepare site
         run: |
           mkdir site
