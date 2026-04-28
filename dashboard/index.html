@@ -16,6 +16,7 @@
           Automated visibility into test health, failure analysis, maintenance needs, coverage gaps, and release risk.
         </p>
       </div>
+
       <div class="status-card" id="releaseStatus">
         Loading...
       </div>
@@ -23,26 +24,37 @@
 
     <section class="metrics-grid">
       <div class="metric-card">
+        <span class="metric-icon">🧪</span>
         <span>Total Tests</span>
         <strong id="totalTests">--</strong>
       </div>
+
       <div class="metric-card">
+        <span class="metric-icon">✅</span>
         <span>Passed Results</span>
         <strong id="passedResults">--</strong>
       </div>
+
       <div class="metric-card">
+        <span class="metric-icon">❌</span>
         <span>Failed Tests</span>
         <strong id="failedTests">--</strong>
       </div>
+
       <div class="metric-card">
+        <span class="metric-icon">⚠️</span>
         <span>Flaky Tests</span>
         <strong id="flakyTests">--</strong>
       </div>
+
       <div class="metric-card">
+        <span class="metric-icon">🛠️</span>
         <span>Maintenance Suggestions</span>
         <strong id="maintenanceCount">--</strong>
       </div>
+
       <div class="metric-card">
+        <span class="metric-icon">📉</span>
         <span>Coverage Gaps</span>
         <strong id="coverageGaps">--</strong>
       </div>
@@ -50,28 +62,28 @@
 
     <section class="content-grid">
       <article class="panel">
-        <h2>Release Risk</h2>
+        <h2>🚦 Release Risk</h2>
         <p><strong>Risk Score:</strong> <span id="riskScore">--</span></p>
         <p><strong>Risk Level:</strong> <span id="riskLevel">--</span></p>
         <p><strong>Recommendation:</strong> <span id="releaseRecommendation">--</span></p>
       </article>
 
       <article class="panel">
-        <h2>Risk Drivers</h2>
+        <h2>📌 Risk Drivers</h2>
         <ul id="riskDrivers">
           <li>Loading...</li>
         </ul>
       </article>
 
       <article class="panel">
-        <h2>Coverage Gaps</h2>
+        <h2>📊 Coverage Gaps</h2>
         <ul id="coverageList">
           <li>Loading...</li>
         </ul>
       </article>
 
       <article class="panel">
-        <h2>Maintenance Suggestions</h2>
+        <h2>🛠️ Maintenance Suggestions</h2>
         <ul id="maintenanceList">
           <li>Loading...</li>
         </ul>
@@ -79,7 +91,7 @@
     </section>
 
     <section class="panel full-width">
-      <h2>AI QA Summary</h2>
+      <h2>🤖 AI QA Summary</h2>
       <pre id="aiSummary">Loading...</pre>
     </section>
   </main>
