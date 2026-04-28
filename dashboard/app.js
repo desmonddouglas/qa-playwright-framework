@@ -40,6 +40,13 @@ function renderList(id, items) {
   });
 }
 
+function getBadgeClass(level) {
+  if (level === 'low') return 'badge badge-low';
+  if (level === 'medium') return 'badge badge-medium';
+  if (level === 'high') return 'badge badge-high';
+  return 'badge badge-unknown';
+}
+
 async function initDashboard() {
   const failureSummary = await loadJson('./artifacts/failure-summary-v3.json', {});
   const releaseRisk = await loadJson('./artifacts/release-risk-report.json', {});
@@ -50,10 +57,23 @@ async function initDashboard() {
   const riskLevel = releaseRisk.riskLevel || 'unknown';
   const releaseRecommendation = releaseRisk.releaseRecommendation || 'unknown';
 
+  // 🔥 Release Status Card (with badge + timestamp)
   const releaseStatus = document.getElementById('releaseStatus');
-  releaseStatus.textContent = `${riskLevel.toUpperCase()} RISK\n${releaseRecommendation}`;
-  releaseStatus.classList.add(`status-${riskLevel}`);
+  releaseStatus.innerHTML = `
+    <div class="${getBadgeClass(riskLevel)}">
+      ${riskLevel.toUpperCase()} RISK
+    </div>
+    <div style="margin-top:10px; font-weight:600;">
+      ${releaseRecommendation}
+    </div>
+  `;
 
+  const timestamp = document.createElement('div');
+  timestamp.className = 'timestamp';
+  timestamp.textContent = `Last updated: ${new Date().toLocaleString()}`;
+  releaseStatus.appendChild(timestamp);
+
+  // 🔢 Metrics
   setText('totalTests', failureSummary.uniqueTests ?? '--');
   setText('passedResults', failureSummary.passedResults ?? '--');
   setText('failedTests', failureSummary.failedTests ?? '--');
@@ -63,6 +83,7 @@ async function initDashboard() {
   const missingCoverage = coverageGap.filter(area => area.status === 'missing');
   setText('coverageGaps', missingCoverage.length);
 
+  // 🚦 Risk Details
   setText('riskScore', releaseRisk.riskScore ?? '--');
   setText('riskLevel', riskLevel);
   setText('releaseRecommendation', releaseRecommendation);
@@ -71,14 +92,19 @@ async function initDashboard() {
 
   renderList(
     'coverageList',
-    coverageGap.map(area => `${area.area}: ${area.status} - ${area.recommendation}`)
+    coverageGap.map(area =>
+      `${area.area.toUpperCase()}: ${area.status.toUpperCase()} — ${area.recommendation}`
+    )
   );
 
   renderList(
     'maintenanceList',
-    maintenance.map(item => `${item.title}: ${item.suggestedChange}`)
+    maintenance.map(item =>
+      `${item.title}: ${item.suggestedChange}`
+    )
   );
 
+  // 🤖 AI Summary
   setText('aiSummary', aiSummary);
 }
 
