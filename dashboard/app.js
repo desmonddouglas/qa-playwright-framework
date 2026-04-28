@@ -58,12 +58,12 @@ function formatTimestamp(ts) {
   const date = new Date(ts);
 
   return date.toLocaleString('en-US', {
-    weekday: 'short',
-    month: 'short',
+    month: 'numeric',
     day: 'numeric',
     year: 'numeric',
     hour: 'numeric',
     minute: '2-digit',
+    second: '2-digit',
     hour12: true
   });
 }
@@ -71,6 +71,9 @@ function formatTimestamp(ts) {
 function formatAiSummary(text) {
   return text
     .replace(/^# .*$/gm, '')
+    .replace(/Generated:\s*(.*)/, (match, timestamp) => {
+      return `Generated: ${formatTimestamp(timestamp)}`;
+    })
     .replace(/## /g, '\n')
     .replace(/\*\*/g, '')
     .trim();
@@ -86,7 +89,7 @@ async function initDashboard() {
   const riskLevel = releaseRisk.riskLevel || 'unknown';
   const releaseRecommendation = releaseRisk.releaseRecommendation || 'unknown';
 
-  // 🔥 Release Status
+  // 🔥 Release Status (clean version)
   const releaseStatus = document.getElementById('releaseStatus');
   releaseStatus.innerHTML = `
     <div class="${getBadgeClass(riskLevel)}">
@@ -97,7 +100,7 @@ async function initDashboard() {
     </div>
   `;
 
-  // 🕒 Timestamp (CI-based)
+  // 🕒 Timestamp (clean and simple)
   const generatedTime = extractTimestamp(aiSummary);
 
   const timestamp = document.createElement('div');
@@ -107,21 +110,6 @@ async function initDashboard() {
     : 'Last CI Run: Unknown';
 
   releaseStatus.appendChild(timestamp);
-
-  // 🟢 Health Indicator
-  const isHealthy =
-    (failureSummary.failedTests ?? 1) === 0 &&
-    (failureSummary.flakyTests ?? 1) === 0 &&
-    releaseRisk.riskLevel === 'low';
-
-  if (isHealthy) {
-    const banner = document.createElement('div');
-    banner.style.marginTop = '10px';
-    banner.style.color = '#166534';
-    banner.style.fontWeight = '600';
-    banner.textContent = '✔ System Stable';
-    releaseStatus.appendChild(banner);
-  }
 
   // 📊 Metrics
   setText('totalTests', failureSummary.uniqueTests ?? '--');
@@ -143,7 +131,7 @@ async function initDashboard() {
   renderList(
     'coverageList',
     coverageGap.map(area =>
-      `${area.area.toUpperCase()}: ${area.status.toUpperCase()} — ${area.recommendation}`
+      `${area.area}: ${area.status} - ${area.recommendation}`
     )
   );
 
@@ -154,7 +142,7 @@ async function initDashboard() {
     )
   );
 
-  // 🤖 AI Summary
+  // 🤖 AI Summary (clean timestamp only)
   document.getElementById('aiSummary').textContent = formatAiSummary(aiSummary);
 }
 
