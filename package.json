@@ -13,6 +13,7 @@
     "analyze:release-risk": "tsx scripts/release-risk.ts",
     "ai:summary": "tsx scripts/ai-summary.ts",
     "analyze:coverage": "tsx scripts/coverage-gap.ts",
+    "generate:tests": "tsx scripts/test-generation.ts",
     "report:maintenance": "tsx scripts/maintenance-report.ts",
     "clean": "rm -rf test-results playwright-report"
   },

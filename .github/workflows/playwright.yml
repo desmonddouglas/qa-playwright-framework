@@ -63,6 +63,9 @@ jobs:
 
       - name: Run Coverage Gap Agent
         run: npm run analyze:coverage
+    
+      - name: Run Test Generation Agent
+        run: npm run generate:tests
 
       - name: Generate AI Summary
         run: npm run ai:summary

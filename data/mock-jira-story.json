@@ -1,0 +1,13 @@
+{
+  "key": "QA-101",
+  "title": "User can log in with valid credentials",
+  "description": "As a registered user, I want to log in so that I can access my account dashboard.",
+  "acceptanceCriteria": [
+    "User can enter a valid email and password",
+    "User can submit the login form",
+    "User is redirected to the dashboard after successful login",
+    "An error message appears for invalid credentials"
+  ],
+  "priority": "High",
+  "component": "Authentication"
+}
