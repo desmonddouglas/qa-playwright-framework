@@ -60,3 +60,6 @@ jobs:
 
       - name: Run Release Risk Agent
         run: npm run analyze:release-risk
+
+      - name: Generate AI Summary
+        run: npm run ai:summary
