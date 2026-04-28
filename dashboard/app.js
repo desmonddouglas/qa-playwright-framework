@@ -41,11 +41,11 @@ function renderList(id, items) {
 }
 
 async function initDashboard() {
-  const failureSummary = await loadJson('../artifacts/failure-summary-v3.json', {});
-  const releaseRisk = await loadJson('../artifacts/release-risk-report.json', {});
-  const coverageGap = await loadJson('../artifacts/coverage-gap-report.json', []);
-  const maintenance = await loadJson('../artifacts/maintenance-suggestions.json', []);
-  const aiSummary = await loadText('../artifacts/ai-summary.md', 'No AI summary found.');
+  const failureSummary = await loadJson('./artifacts/failure-summary-v3.json', {});
+  const releaseRisk = await loadJson('./artifacts/release-risk-report.json', {});
+  const coverageGap = await loadJson('./artifacts/coverage-gap-report.json', []);
+  const maintenance = await loadJson('./artifacts/maintenance-suggestions.json', []);
+  const aiSummary = await loadText('./artifacts/ai-summary.md', 'No AI summary found.');
 
   const riskLevel = releaseRisk.riskLevel || 'unknown';
   const releaseRecommendation = releaseRisk.releaseRecommendation || 'unknown';
