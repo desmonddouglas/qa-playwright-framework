@@ -21,7 +21,11 @@ jobs:
         run: |
           mkdir site
           cp -r dashboard/* site/
-          cp -r artifacts site/artifacts || true
+
+          if [ -d "artifacts" ]; then
+            mkdir -p site/artifacts
+            cp -r artifacts/* site/artifacts/
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
