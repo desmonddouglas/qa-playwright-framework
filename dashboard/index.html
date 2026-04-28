@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QA Intelligence Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="dashboard">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Quality Engineering Platform</p>
+        <h1>QA Intelligence Dashboard</h1>
+        <p class="subtitle">
+          Automated visibility into test health, failure analysis, maintenance needs, coverage gaps, and release risk.
+        </p>
+      </div>
+      <div class="status-card" id="releaseStatus">
+        Loading...
+      </div>
+    </header>
+
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <span>Total Tests</span>
+        <strong id="totalTests">--</strong>
+      </div>
+      <div class="metric-card">
+        <span>Passed Results</span>
+        <strong id="passedResults">--</strong>
+      </div>
+      <div class="metric-card">
+        <span>Failed Tests</span>
+        <strong id="failedTests">--</strong>
+      </div>
+      <div class="metric-card">
+        <span>Flaky Tests</span>
+        <strong id="flakyTests">--</strong>
+      </div>
+      <div class="metric-card">
+        <span>Maintenance Suggestions</span>
+        <strong id="maintenanceCount">--</strong>
+      </div>
+      <div class="metric-card">
+        <span>Coverage Gaps</span>
+        <strong id="coverageGaps">--</strong>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel">
+        <h2>Release Risk</h2>
+        <p><strong>Risk Score:</strong> <span id="riskScore">--</span></p>
+        <p><strong>Risk Level:</strong> <span id="riskLevel">--</span></p>
+        <p><strong>Recommendation:</strong> <span id="releaseRecommendation">--</span></p>
+      </article>
+
+      <article class="panel">
+        <h2>Risk Drivers</h2>
+        <ul id="riskDrivers">
+          <li>Loading...</li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <h2>Coverage Gaps</h2>
+        <ul id="coverageList">
+          <li>Loading...</li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <h2>Maintenance Suggestions</h2>
+        <ul id="maintenanceList">
+          <li>Loading...</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="panel full-width">
+      <h2>AI QA Summary</h2>
+      <pre id="aiSummary">Loading...</pre>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

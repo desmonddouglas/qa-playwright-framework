@@ -1,0 +1,142 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f7fb;
+  color: #1f2937;
+}
+
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: stretch;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4f46e5;
+  letter-spacing: 0.08em;
+}
+
+h1 {
+  font-size: 38px;
+  margin: 8px 0;
+}
+
+.subtitle {
+  max-width: 760px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.status-card {
+  min-width: 260px;
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  font-size: 22px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-left: 8px solid #9ca3af;
+}
+
+.status-low {
+  border-left-color: #16a34a;
+}
+
+.status-medium {
+  border-left-color: #f59e0b;
+}
+
+.status-high {
+  border-left-color: #dc2626;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metric-card,
+.panel {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.metric-card span {
+  display: block;
+  color: #6b7280;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.metric-card strong {
+  font-size: 32px;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.panel h2 {
+  margin-top: 0;
+}
+
+.panel ul {
+  padding-left: 20px;
+}
+
+.panel li {
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.full-width {
+  margin-top: 20px;
+}
+
+pre {
+  white-space: pre-wrap;
+  font-family: inherit;
+  color: #374151;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .hero,
+  .content-grid {
+    grid-template-columns: 1fr;
+    display: block;
+  }
+
+  .status-card {
+    margin-top: 20px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
