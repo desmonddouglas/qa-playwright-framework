@@ -47,6 +47,19 @@ function getBadgeClass(level) {
   return 'badge badge-unknown';
 }
 
+function extractTimestamp(aiSummaryText) {
+  const match = aiSummaryText.match(/Generated:\s*(.*)/);
+  return match ? match[1] : null;
+}
+
+function formatAiSummary(text) {
+  return text
+    .replace(/^# .*$/gm, '')
+    .replace(/## /g, '\n')
+    .replace(/\*\*/g, '')
+    .trim();
+}
+
 async function initDashboard() {
   const failureSummary = await loadJson('./artifacts/failure-summary-v3.json', {});
   const releaseRisk = await loadJson('./artifacts/release-risk-report.json', {});
@@ -57,7 +70,6 @@ async function initDashboard() {
   const riskLevel = releaseRisk.riskLevel || 'unknown';
   const releaseRecommendation = releaseRisk.releaseRecommendation || 'unknown';
 
-  // 🔥 Release Status Card (with badge + timestamp)
   const releaseStatus = document.getElementById('releaseStatus');
   releaseStatus.innerHTML = `
     <div class="${getBadgeClass(riskLevel)}">
@@ -68,12 +80,30 @@ async function initDashboard() {
     </div>
   `;
 
+  const generatedTime = extractTimestamp(aiSummary);
+
   const timestamp = document.createElement('div');
   timestamp.className = 'timestamp';
-  timestamp.textContent = `Last updated: ${new Date().toLocaleString()}`;
+  timestamp.textContent = generatedTime
+    ? `Last CI Run: ${new Date(generatedTime).toLocaleString()}`
+    : 'Last CI Run: Unknown';
+
   releaseStatus.appendChild(timestamp);
 
-  // 🔢 Metrics
+  const isHealthy =
+    (failureSummary.failedTests ?? 1) === 0 &&
+    (failureSummary.flakyTests ?? 1) === 0 &&
+    releaseRisk.riskLevel === 'low';
+
+  if (isHealthy) {
+    const banner = document.createElement('div');
+    banner.style.marginTop = '10px';
+    banner.style.color = '#166534';
+    banner.style.fontWeight = '600';
+    banner.textContent = '✔ System Stable';
+    releaseStatus.appendChild(banner);
+  }
+
   setText('totalTests', failureSummary.uniqueTests ?? '--');
   setText('passedResults', failureSummary.passedResults ?? '--');
   setText('failedTests', failureSummary.failedTests ?? '--');
@@ -83,7 +113,6 @@ async function initDashboard() {
   const missingCoverage = coverageGap.filter(area => area.status === 'missing');
   setText('coverageGaps', missingCoverage.length);
 
-  // 🚦 Risk Details
   setText('riskScore', releaseRisk.riskScore ?? '--');
   setText('riskLevel', riskLevel);
   setText('releaseRecommendation', releaseRecommendation);
@@ -104,8 +133,7 @@ async function initDashboard() {
     )
   );
 
-  // 🤖 AI Summary
-  setText('aiSummary', aiSummary);
+  document.getElementById('aiSummary').textContent = formatAiSummary(aiSummary);
 }
 
 initDashboard();
