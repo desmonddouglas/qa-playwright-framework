@@ -197,15 +197,26 @@ pre {
 
 #releaseStatus {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;   /* 🔥 stack vertically */
+  align-items: flex-start;  /* left align */
+  gap: 8px;
 }
 
+/* Top line (risk + recommendation) */
 #releaseStatus .badge {
-  font-size: 22px;
+  font-size: 26px;
+  font-weight: 700;
 }
 
+#releaseStatus div:nth-child(2) {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Bottom line (timestamp) */
 .timestamp {
-  font-size: 14px;
+  font-size: 16px;
+  color: #6b7280;  /* subtle gray */
+  font-weight: 500;
 }
 }
