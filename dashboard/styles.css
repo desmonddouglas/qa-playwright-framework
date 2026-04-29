@@ -194,4 +194,18 @@ pre {
   align-items: center;
   gap: 8px;
 }
+
+#releaseStatus {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#releaseStatus .badge {
+  font-size: 22px;
+}
+
+.timestamp {
+  font-size: 14px;
+}
 }
