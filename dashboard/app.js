@@ -95,7 +95,7 @@ async function initDashboard() {
     <div class="${getBadgeClass(riskLevel)}">
       ${riskLevel.toUpperCase()} RISK
     </div>
-    <div style="margin-top:10px; font-weight:600;">
+    <div class="recommendation">
       ${releaseRecommendation}
     </div>
   `;
