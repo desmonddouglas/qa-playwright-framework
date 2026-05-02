@@ -1,0 +1,14 @@
+{
+  "key": "QA-102",
+  "title": "User can view QA Intelligence Dashboard",
+  "description": "As a quality leader, I want to view a QA dashboard so that I can understand test health, coverage gaps, and release risk.",
+  "acceptanceCriteria": [
+    "Dashboard displays release status",
+    "Dashboard displays total tests",
+    "Dashboard displays failed tests",
+    "Dashboard displays coverage gaps",
+    "Dashboard displays AI QA summary"
+  ],
+  "priority": "High",
+  "component": "Dashboard"
+}

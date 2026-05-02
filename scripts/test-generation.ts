@@ -19,7 +19,7 @@ type GeneratedScenario = {
   priority: string;
 };
 
-const inputFile = path.resolve('data/mock-jira-story.json');
+const inputFile = path.resolve('data/mock-jira-stories/QA-101-login.json');
 const outputJson = path.resolve('artifacts/generated-test-plan.json');
 const outputMd = path.resolve('artifacts/generated-test-plan.md');
 
