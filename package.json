@@ -19,6 +19,7 @@
     "clean": "rm -rf test-results playwright-report"
   },
   "devDependencies": {
+    "@playwright/mcp": "^0.0.73",
     "@playwright/test": "^1.55.0",
     "@types/node": "^24.7.0",
     "serve": "^14.2.6",
