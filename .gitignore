@@ -3,4 +3,9 @@ playwright-report
 test-results
 artifacts/
 .env
-.DS_StoreCLAUDE_SESSION_REPORT.md
+
+# macOS
+.DS_Store
+
+# Claude
+CLAUDE_SESSION_REPORT.md
