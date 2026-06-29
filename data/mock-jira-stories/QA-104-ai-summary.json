@@ -1,0 +1,14 @@
+{
+  "key": "QA-104",
+  "title": "System displays AI QA summary",
+  "description": "As a quality leader, I want the dashboard to display an AI QA summary so that I can quickly understand test health, release risk, and recommended next steps.",
+  "acceptanceCriteria": [
+    "AI QA Summary section is visible",
+    "AI QA Summary displays generated timestamp",
+    "AI QA Summary includes overall status",
+    "AI QA Summary includes key quality signals",
+    "AI QA Summary includes recommended next steps"
+  ],
+  "priority": "High",
+  "component": "AI Summary"
+}
