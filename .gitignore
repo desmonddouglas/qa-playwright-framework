@@ -3,4 +3,4 @@ playwright-report
 test-results
 artifacts/
 .env
-.DS_Store
+.DS_StoreCLAUDE_SESSION_REPORT.md
