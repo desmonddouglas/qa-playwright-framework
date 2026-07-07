@@ -1,0 +1,14 @@
+{
+  "key": "QA-105",
+  "title": "User can view coverage gap analysis",
+  "description": "As a quality leader, I want to view coverage gap analysis so that I can identify areas of the application that need additional test coverage.",
+  "acceptanceCriteria": [
+    "Dashboard displays a Coverage Gaps metric card",
+    "Dashboard displays a Coverage Gaps section",
+    "Coverage Gaps section lists uncovered or under-tested areas",
+    "Coverage gap count is numeric",
+    "Coverage gap content does not display broken or fallback text"
+  ],
+  "priority": "High",
+  "component": "Coverage Gaps"
+}
