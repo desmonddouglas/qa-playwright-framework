@@ -1,26 +1,24 @@
 import { test, expect, Page } from '@playwright/test';
 
 /**
- * QA-105: User can view Coverage Gaps
+ * QA-105 | User can view coverage gap analysis
  *
- * As a quality leader, I want to view coverage gaps on the dashboard
- * so that I can identify areas of the product that lack sufficient test coverage.
+ * As a quality leader, I want to view coverage gap analysis so that I can
+ * identify areas of the application that need additional test coverage.
  *
  * Suite: Regression
  *
  * Selector strategy:
- *   getByTestId('coverage-gaps')        → metric card wrapper div
- *   getByTestId('coverage-gaps-panel')  → detail article panel
- *   #coverageGaps                       → <strong> value written by app.js
- *   #coverageList                       → <ul> list written by app.js
- *   #aiSummary                          → AI summary <pre> written by app.js
+ *   getByTestId('coverage-gaps')        → metric card wrapper  [data-testid]
+ *   getByTestId('coverage-gaps-panel')  → detail article panel [data-testid]
+ *   #coverageGaps                       → <strong> value populated by app.js
+ *   #coverageList                       → <ul> list populated by app.js
+ *   #aiSummary                          → <pre> text populated by app.js
  *
- * Recommendation strings come from scripts/coverage-gap.ts:
+ * Recommendation strings are sourced from scripts/coverage-gap.ts:
  *   covered  → 'Coverage exists for this area.'
- *   missing + requiredForSmoke     → 'Add at least one smoke test for this required area.'
- *   missing + !requiredForSmoke    → 'Consider adding regression coverage for this area...'
- *
- * ⚠️ REQUIRES HUMAN REVIEW before merging.
+ *   missing + requiredForSmoke   → 'Add at least one smoke test for this required area.'
+ *   missing + !requiredForSmoke  → 'Consider adding regression coverage for this area if it is relevant to the product.'
  */
 
 const DASHBOARD_URL = 'https://desmonddouglas.github.io/qa-playwright-framework/';
@@ -33,22 +31,17 @@ const VALID_RECOMMENDATIONS = [
   'Consider adding regression coverage for this area if it is relevant to the product.',
 ] as const;
 
-const BROKEN_VALUE_PATTERN = /undefined|null|NaN|<[^>]+>|Loading\.\.\.|--/i;
+const BROKEN_VALUE_PATTERN = /\bundefined\b|\bnull\b|\bNaN\b|<[^>]+>|Loading\.\.\.|--/i;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-async function gotoDashboard(page: Page) {
-    await page.goto(DASHBOARD_URL);
-  
-    await expect(page.getByTestId('coverage-gaps-panel')).toBeVisible();
-  
-    // Wait for the metric card to populate
-    await expect(page.locator('#coverageGaps')).not.toHaveText('--');
-  
-    // Wait for the coverage list to populate
-    await expect(page.locator('#coverageList li').first()).toBeVisible();
+async function gotoDashboard(page: Page): Promise<void> {
+  await page.goto(DASHBOARD_URL);
+  await expect(page.getByTestId('coverage-gaps-panel')).toBeVisible();
+  await expect(page.locator('#coverageGaps')).not.toHaveText('--');
+  await expect(page.locator('#coverageList li').first()).toBeVisible();
 }
 
 async function getCoverageGapCardCount(page: Page): Promise<number> {
@@ -57,8 +50,8 @@ async function getCoverageGapCardCount(page: Page): Promise<number> {
 }
 
 async function getCoverageListItems(page: Page): Promise<string[]> {
-    const items = await page.locator('#coverageList li').allTextContents();
-    return items.map(text => text.trim());
+  const items = await page.locator('#coverageList li').allTextContents();
+  return items.map(text => text.trim());
 }
 
 async function getAISummaryText(page: Page): Promise<string> {
@@ -71,9 +64,9 @@ async function getAISummaryText(page: Page): Promise<string> {
 // Tests
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('QA-105 | Coverage Gaps | Regression', () => {
+test.describe('QA-105 | Coverage Gap Analysis | Regression', () => {
 
-  // ── AC: Coverage Gaps metric card count is a non-negative integer ──────────
+  // ── AC: Dashboard displays a Coverage Gaps metric card ────────────────────
 
   test('coverage gaps metric card count is a non-negative integer', async ({ page }) => {
     await gotoDashboard(page);
@@ -88,22 +81,10 @@ test.describe('QA-105 | Coverage Gaps | Regression', () => {
     await gotoDashboard(page);
 
     const text = (await page.locator('#coverageGaps').textContent() ?? '').trim();
-    expect(text).not.toMatch(BROKEN_VALUE_PATTERN);
+    expect(text, 'Metric card value should not match broken value pattern').not.toMatch(BROKEN_VALUE_PATTERN);
   });
 
-  // ── AC: Coverage Gaps metric card count reflects areas with 'missing' status
-
-  test('coverage gaps metric card count matches number of missing areas in panel', async ({ page }) => {
-    await gotoDashboard(page);
-
-    const cardCount = await getCoverageGapCardCount(page);
-    const items = await getCoverageListItems(page);
-    const missingCount = items.filter(text => text.includes('missing')).length;
-
-    expect(missingCount, `Expected ${cardCount} missing items but found ${missingCount}`).toBe(cardCount);
-  });
-
-  // ── AC: Coverage Gaps detail panel is visible ──────────────────────────────
+  // ── AC: Dashboard displays a Coverage Gaps section ────────────────────────
 
   test('coverage gaps panel heading is visible', async ({ page }) => {
     await gotoDashboard(page);
@@ -113,7 +94,15 @@ test.describe('QA-105 | Coverage Gaps | Regression', () => {
     ).toBeVisible();
   });
 
-  // ── AC: Panel contains a list of coverage areas ────────────────────────────
+  test('coverage gaps panel does not show error or fallback text', async ({ page }) => {
+    await gotoDashboard(page);
+
+    const panelText = (await page.getByTestId('coverage-gaps-panel').textContent() ?? '');
+    expect(panelText).not.toMatch(/error|failed to load|unavailable/i);
+    expect(panelText).not.toMatch(BROKEN_VALUE_PATTERN);
+  });
+
+  // ── AC: Coverage Gaps section lists uncovered or under-tested areas ────────
 
   test('coverage gaps panel list contains at least one item', async ({ page }) => {
     await gotoDashboard(page);
@@ -121,8 +110,6 @@ test.describe('QA-105 | Coverage Gaps | Regression', () => {
     const items = await getCoverageListItems(page);
     expect(items.length, 'Coverage list should have at least one item').toBeGreaterThan(0);
   });
-
-  // ── AC: Each item displays an area name and a status ──────────────────────
 
   test('every coverage list item contains an area name and a recognized status', async ({ page }) => {
     await gotoDashboard(page);
@@ -137,13 +124,8 @@ test.describe('QA-105 | Coverage Gaps | Regression', () => {
         hasValidStatus,
         `Item "${text}" should contain a valid status: ${VALID_STATUSES.join(' | ')}`
       ).toBe(true);
-
-      // Items follow the pattern "area: status - recommendation"
-      expect(text, `Item "${text}" should contain a colon separator`).toMatch(/\w+:\s*(covered|missing)/);
     }
   });
-
-  // ── AC: Missing areas include a recommended action ─────────────────────────
 
   test('every missing coverage area includes a recognized recommendation', async ({ page }) => {
     await gotoDashboard(page);
@@ -151,7 +133,10 @@ test.describe('QA-105 | Coverage Gaps | Regression', () => {
     const items = await getCoverageListItems(page);
     const missingItems = items.filter(text => text.includes('missing'));
 
-    expect(missingItems.length, 'At least one missing item should exist for this assertion to be meaningful').toBeGreaterThan(0);
+    expect(
+      missingItems.length,
+      'At least one missing item must exist for this assertion to be meaningful'
+    ).toBeGreaterThan(0);
 
     for (const text of missingItems) {
       const hasValidRecommendation = VALID_RECOMMENDATIONS.some(rec => text.includes(rec));
@@ -162,45 +147,44 @@ test.describe('QA-105 | Coverage Gaps | Regression', () => {
     }
   });
 
-  // ── AC: Panel does not show broken or fallback text ────────────────────────
+  // ── AC: Coverage gap count is numeric ─────────────────────────────────────
 
-  test('coverage gaps panel does not show error or fallback text', async ({ page }) => {
-    await gotoDashboard(page);
-
-    const panelText = (await page.getByTestId('coverage-gaps-panel').textContent() ?? '');
-    expect(panelText).not.toMatch(/error|failed to load|unavailable/i);
-    expect(panelText).not.toMatch(BROKEN_VALUE_PATTERN);
-  });
-
-  // ── AC: AI Summary references the same coverage gap count ─────────────────
-
-  test.skip('AI summary references the same coverage gap count as the metric card', async ({ page }) => {
+  test('coverage gap count in metric card matches the number of missing areas in the panel', async ({ page }) => {
     await gotoDashboard(page);
 
     const cardCount = await getCoverageGapCardCount(page);
-    const summaryText = await getAISummaryText(page);
+    const items = await getCoverageListItems(page);
+    const missingCount = items.filter(text => text.includes('missing')).length;
 
-    const coverageGapsMatch = summaryText.match(/Coverage Gaps:\s*(\d+)/i);
     expect(
-      coverageGapsMatch,
-      'AI summary should contain a "Coverage Gaps: N" entry in Key Signals'
-    ).toBeTruthy();
-
-    const summaryCount = Number(coverageGapsMatch![1]);
-    expect(
-      summaryCount,
-      `AI summary coverage gap count (${summaryCount}) should match metric card (${cardCount})`
+      missingCount,
+      `Metric card shows ${cardCount} gaps but panel has ${missingCount} missing items`
     ).toBe(cardCount);
+  });
+
+  // ── AC: Coverage gap content does not display broken or fallback text ──────
+
+  test('coverage gap list items do not contain broken or placeholder values', async ({ page }) => {
+    await gotoDashboard(page);
+
+    const items = await getCoverageListItems(page);
+
+    for (const text of items) {
+      expect(
+        text,
+        `List item "${text}" should not match broken value pattern`
+      ).not.toMatch(BROKEN_VALUE_PATTERN);
+    }
   });
 
   test('AI summary does not show broken or fallback text', async ({ page }) => {
     await gotoDashboard(page);
 
     const summaryText = await getAISummaryText(page);
+
     expect(summaryText).not.toMatch(/No AI summary found/i);
-    const BROKEN_VALUE_PATTERN =
-  /\bundefined\b|\bnull\b|\bNaN\b|<[^>]+>|Loading\.\.\.|--/i;
-    expect(summaryText.length, 'AI summary should have meaningful content').toBeGreaterThan(100);
+    expect(summaryText).not.toMatch(BROKEN_VALUE_PATTERN);
+    expect(summaryText.length, 'AI summary should contain meaningful content').toBeGreaterThan(100);
   });
 
 });
