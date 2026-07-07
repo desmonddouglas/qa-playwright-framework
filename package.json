@@ -16,7 +16,8 @@
     "generate:tests": "tsx scripts/test-generation.ts",
     "report:maintenance": "tsx scripts/maintenance-report.ts",
     "dashboard": "serve .",
-    "clean": "rm -rf test-results playwright-report"
+    "clean": "rm -rf test-results playwright-report",
+    "build:prompt": "tsx scripts/build-test-generation-prompt.ts"
   },
   "devDependencies": {
     "@playwright/mcp": "^0.0.73",
