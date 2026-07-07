@@ -1,0 +1,17 @@
+{
+    "key": "QA-106",
+    "title": "System validates AI release recommendation",
+    "description": "As a QA Director, I want the framework to validate that the AI release recommendation is consistent with the dashboard quality metrics so that incorrect or contradictory AI guidance can be detected automatically.",
+    "acceptanceCriteria": [
+      "AI QA Summary displays a Release Recommendation",
+      "AI QA Summary displays a Release Risk Level",
+      "AI QA Summary displays Failed Tests count",
+      "AI QA Summary displays Release Risk Score",
+      "Release Recommendation is one of: safe_to_release, release_with_caution, do_not_release, unknown",
+      "Release Risk Level is one of: low, medium, high, unknown",
+      "Release Recommendation aligns with the defined release decision rules",
+      "Test fails if the recommendation contradicts the available quality metrics"
+    ],
+    "priority": "High",
+    "component": "AI Release Governance"
+  }
